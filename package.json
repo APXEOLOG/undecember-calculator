@@ -1,0 +1,22 @@
+{
+  "name": "undecember-builder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "ts-node src/calc.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4",
+    "ts-node": "^10.9.1",
+    "@types/node": "^18.11.14"
+  }
+}
