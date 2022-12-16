@@ -15,8 +15,10 @@ export enum Tag {
   // Rune tags
   Attack = 'Attack',
   Spell = 'Spell',
+
+
   DamageOverTime = 'DoT',
-  Minion = 'Minion',
+
   DefenceEnhance = 'Defence Enhance',
   AttackEnhance = 'Attack Enhance',
   Duration = 'Duration',
@@ -34,4 +36,13 @@ export enum Tag {
   Movement = 'Movement',
   Toggle = 'Toggle',
   DefenceSeal = 'Defence Seal',
+
+  // Targets
+  Player = 'Player',
+  Minion = 'Minion',
+  Sentry = 'Sentry',
+
+  // Effects
+  Effect = 'Effect',
+  Overpower = 'Overpower',
 }

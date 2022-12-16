@@ -1,14 +1,26 @@
-import { Mod, ModSource } from './mod-definition';
+import { ArmorPenetration, ElementalPenetration, MainElementDamage } from './mod-library';
+import { ModSource } from './mod-interfaces';
+import { Tag } from './tags';
+import { Mod } from './mod-definition';
 
-export class Effect implements ModSource {
-  constructor(public name: string, public mods: Mod[], public parentSource?: ModSource) {
+export const EffectTags = [Tag.Overpower];
+
+export class EffectSource implements ModSource {
+  constructor(private effect: Tag) {
+
   }
 
   source(): string {
-    return this.parentSource?.source() ?? '';
+    return `Effect: ${this.effect}`;
   }
 }
 
-export const Overpower = new Effect('Overpower', [
+// @ts-ignore
+export const Effects: { [key in Tag]: Mod[] } = {
+  [Tag.Overpower]: [
+    MainElementDamage.addition.ofMinMax(25, 45, new EffectSource(Tag.Overpower)),
+    ArmorPenetration.increase.of(0.05, new EffectSource(Tag.Overpower)),
+    ElementalPenetration.increase.of(0.05, new EffectSource(Tag.Overpower)),
+  ],
+}
 
-]);

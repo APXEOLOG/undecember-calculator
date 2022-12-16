@@ -1,7 +1,8 @@
-import { Mod, ModProvider, ModSource } from '../mods/mod-definition';
+import { Mod } from '../mods/mod-definition';
 import { Tag } from '../mods/tags';
 import { SkillConfiguration } from './skill-configuration';
 import { Environment } from '../calculation/mod-group';
+import { ModProvider, ModSource } from '../mods/mod-interfaces';
 
 export enum RuneRarity {
   Magic = 'Magic',
@@ -24,6 +25,11 @@ export interface SpecificRuneConfiguration extends ModProvider {
 }
 
 export class RuneDefinition implements ModSource {
+  /**
+   * What is the mod target for this rune. Default is player
+   */
+  public target: Tag.Player | Tag.Minion | Tag.Sentry = Tag.Player;
+
   constructor(public name: string, public tags: Tag[], public rarityBonus: RuneRarityBonus, public levels: RuneLevelDefinition, public apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
     this.rarityBonus.Magic.forEach(it => it.source = this);
     this.rarityBonus.Rare.forEach(it => it.source = this);
@@ -31,6 +37,11 @@ export class RuneDefinition implements ModSource {
     for (let level in this.levels) {
       this.levels[level].forEach(it => it.source = this);
     }
+  }
+
+  forTarget(target: Tag.Player | Tag.Minion | Tag.Sentry = Tag.Player): RuneDefinition {
+    this.target = target;
+    return this;
   }
 
   source(): string {

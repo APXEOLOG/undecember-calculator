@@ -4,10 +4,10 @@ import {
   Damage,
   DoTDamage,
   ElementalDamage,
-  ElementalResists,
+  ElementalResists, GrantOverpower,
   Health,
   HitRate,
-  Mana,
+  Mana, OverpowerEffect,
   SpellDamage,
   SpellHitRate,
 } from '../mods/mod-library';
@@ -54,7 +54,9 @@ export const Flash = new ZodiacConstellation('Flash', 'V', [
   zodiacNode(ElementalDamage.increase.of(0.1), Health.increase.of(0.03)),
 ]);
 
-export const MasteryShade = new ZodiacConstellation('Shade', 'Specialization I', [
+export const Shade = new ZodiacConstellation('Shade', 'Specialization I', [
   zodiacNode(Damage.increase.of(0.15)),
+  zodiacNode(OverpowerEffect.increase.of(0.3)),
+  // zodiacNode(GrantOverpower.addition.of(1)),
 ]);
 

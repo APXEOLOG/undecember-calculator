@@ -1,4 +1,5 @@
-import { Mod, ModProvider, ModSource } from '../mods/mod-definition';
+import { Mod } from '../mods/mod-definition';
+import { ModProvider, ModSource } from '../mods/mod-interfaces';
 
 export class TitlesEffect implements ModSource, ModProvider {
   constructor(private allMods: Mod[]) {

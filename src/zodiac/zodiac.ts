@@ -1,4 +1,5 @@
-import { Mod, ModProvider, ModSource } from '../mods/mod-definition';
+import { Mod } from '../mods/mod-definition';
+import { ModProvider, ModSource } from '../mods/mod-interfaces';
 
 export class ZodiacConstellation implements ModSource, ModProvider {
   constructor(public name: string, public tier: string, public nodes: ZodiacNode[]) {

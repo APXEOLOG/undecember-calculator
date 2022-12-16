@@ -20,6 +20,8 @@ export const LightningDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Light
 export const PhysicalDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Physical], 'Physical DMG');
 export const Damage = new ModBuilder(Tag.Damage, [Tag.Damage, ...DirectDamageTags], 'DMG');
 
+export const MainElementDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Physical, ...ElementalTags], 'Main Element Damage');
+
 /**
  * Multiplier
  */
@@ -65,3 +67,9 @@ export const ElementalResists = new ModBuilder(Tag.Stats, [Tag.Elemental, Tag.Re
  * Other
  */
 export const ProjectileCount = new ModBuilder(Tag.Special, [Tag.Special, Tag.Projectile], 'Projectile Count')
+
+/**
+ * Effects
+ */
+export const GrantOverpower = new ModBuilder(Tag.Effect, [Tag.Overpower], 'Overpower');
+export const OverpowerEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Overpower], 'Overpower Effect');
