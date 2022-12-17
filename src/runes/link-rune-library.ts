@@ -14,6 +14,7 @@ export const ManaStorm: LinkRune = new LinkRune(
   'Mana Storm',
   [Tag.Strike, Tag.DamageOverTime],
   {
+    [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [],
     [RuneRarity.Rare]: [],
     [RuneRarity.Legendary]: [
@@ -59,6 +60,7 @@ export const ElementDamageAmplification: LinkRune = new LinkRune(
   'Element DMG Amplification',
   [...ElementalTags],
   {
+    [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [
       PhysicalDamage.dampening.of(1),
     ],
@@ -97,6 +99,7 @@ export const DoT: LinkRune = new LinkRune(
   'DoT',
   [Tag.Strike, Tag.DamageOverTime],
   {
+    [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [
       DoTDamage.increase.of(0.15),
     ],
@@ -139,6 +142,7 @@ export const SpellDamageIncrease: LinkRune = new LinkRune(
   'Spell DMG Increase',
   [Tag.Strike, Tag.DamageOverTime, Tag.Spell],
   {
+    [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [
       SpellDamage.increase.of(0.2),
     ],

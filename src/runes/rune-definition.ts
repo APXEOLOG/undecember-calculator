@@ -5,6 +5,7 @@ import { Environment } from '../calculation/mod-group';
 import { ModProvider, ModSource } from '../mods/mod-interfaces';
 
 export enum RuneRarity {
+  Normal = 'Normal',
   Magic = 'Magic',
   Rare = 'Rare',
   Legendary = 'Legendary',

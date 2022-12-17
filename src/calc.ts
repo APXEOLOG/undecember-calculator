@@ -1,5 +1,5 @@
 import { Tag } from './mods/tags';
-import { Damage, ElementalDamage, PhysicalDamage } from './mods/mod-library';
+import { Damage, ElementalDamage, PhysicalDamage, PoisonPenetration } from './mods/mod-library';
 import { CalculatedValue, Environment } from './calculation/mod-group';
 import { ToxicFlame } from './runes/skill-rune-library';
 import { SkillConfiguration } from './runes/skill-configuration';
@@ -9,6 +9,8 @@ import { Cliff, Forest, Gem, Seed, Shade } from './zodiac/zodiac-library';
 import { Effects, EffectTags } from './mods/effects';
 import { Mod, ModType } from './mods/mod-definition';
 import { ModProxySource } from './mods/mod-interfaces';
+import { DoT, ElementDamageAmplification, ManaStorm } from './runes/link-rune-library';
+import { MonsterLevel } from './enemy/monster-data';
 
 function printCalcValue(value: CalculatedValue) {
   console.log(``)
@@ -56,7 +58,10 @@ function calculateEffects(env: Environment, skill: SpecificRuneConfiguration, co
   env.addAll(modsToAdd);
 }
 
-function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguration, config?: SkillConfiguration): number {
+/**
+ * TODO: Multi damage types support
+ */
+function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguration, config: SkillConfiguration): number {
   const env = new Environment();
 
   // -- Prepare environment
@@ -92,15 +97,20 @@ function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguratio
   console.log(` = Damage-related mods:`);
   damageMods.mods().forEach(mod => console.log(`   # ${mod.toString()}`));
   console.log(` = ${damageValue.toString()}`);
+  const totalBeforePenetration = multiplierValue.total * damageValue.total;
+  console.log(` = DPS before calculating penetration: ${Math.round(totalBeforePenetration)}`);
 
   // 3. Calculate penetration & target resistances
-
   console.log(`\n==== Calculation stage: Calculating penetration ====`);
+  const flatPenetrationMods = env.ofCategory(Tag.Penetration).findWithAnyTags(skill.tags).ofType(ModType.Addition);
+  const flatPenetrationValue = flatPenetrationMods.calculateValue();
+  console.log(` = Flat penetration mods:`);
+  flatPenetrationMods.mods().forEach(mod => console.log(`   # ${mod.toString()}`));
+  console.log(` = ${flatPenetrationValue.toString()}`);
 
-  const resistanceEffect = 1 - ((config?.targetResist ?? 0) / 100);
-
-  console.log(`Target resistance multiplier: ${ resistanceEffect }`);
-
+  console.log(`Enemy resistance: ${config.enemy.toString()}`);
+  const resistanceEffect = config.enemy.calculateElementalDamageCoefficientForFlatResist(config.enemy.flatElementalResist - flatPenetrationValue.total);
+  console.log(`Base elemental damage reduction: ${resistanceEffect}`);
 
   // 3. Final result
   const final = multiplierValue.total * damageValue.total * resistanceEffect;
@@ -111,9 +121,11 @@ function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguratio
 
 function calcDps() {
   const titles = new TitlesEffect([
-    ElementalDamage.increase.of(0.27),
+    ElementalDamage.increase.of(0.16), // ring
     PhysicalDamage.increase.of(0.24),
+    ElementalDamage.increase.of(0.27),
     Damage.increase.of(0.05),
+    //PoisonPenetration.addition.of(10),
   ]);
 
   const env = new Environment();
@@ -123,16 +135,32 @@ function calcDps() {
   env.addAll(Gem.mods());
   env.addAll(Seed.mods());
   env.addAll(Shade.mods());
-  // env.addAll(ElementDamageAmplification.of(RuneRarity.Magic, 30).mods);
+  // env.add(ElementalDamage.increase.of(0.29));
+  env.addAll(ElementDamageAmplification.of(RuneRarity.Magic, 32).mods());
+  env.addAll(DoT.of(RuneRarity.Magic, 33).mods());
+  env.addAll(ManaStorm.of(RuneRarity.Legendary, 34).mods());
+
+  const rune = ToxicFlame.of(RuneRarity.Legendary, 30);
+  //const rune = ToxicFlame.of(RuneRarity.Normal, 1);
 
   console.log(`Calculating Toxic Flame DPS...`);
-  const dps = calculateForSkill(env, ToxicFlame.of(RuneRarity.Legendary, 30), {
-    stacks: 1,
+  /*const dps5 = calculateForSkill(env, rune, {
+    enemy: MonsterLevel['1'],
+    stacks: 5,
     targetResist: 10,
+    silent: true,
+  });*/
+
+  const dps = calculateForSkill(env, rune, {
+    enemy: MonsterLevel['100'],
+    stacks: 1,
   });
+
+
 
   console.log();
   console.log(`Resulting DPS: ${ Math.round(dps) }`);
+  //console.log(`Resulting DPS 5 stacks: ${ Math.round(dps5) }`);
 }
 
 calcDps();

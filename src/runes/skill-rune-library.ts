@@ -8,6 +8,7 @@ export const ToxicFlame: SkillRune = new SkillRune(
   'Toxic Flame',
   [Tag.Spell, Tag.DamageOverTime, Tag.Poison], // Tag.Projectile - not affected by proj damage
   {
+    [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [
       DoTDamage.increase.of(0.2),
     ],
