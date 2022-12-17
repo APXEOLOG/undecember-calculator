@@ -12,16 +12,29 @@ export class MonsterData {
     this.flatElementalResist = getMonsterFlatElementalResistancesForLevel(level);
   }
 
-  public calculateElementalDamageCoefficientForFlatResist(flatResist: number = this.flatElementalResist): number {
-    return 1 - (flatResist * this.elementalResistEffect) / 100;
+  public calculateElementalDamageMultiplierFromResists(flatResistReduction: number, percentResistReduction: number): number {
+    // 1. Apply percent-based reduction
+    // 2. Apply flat reduction
+
+    // How much flat res do we ignore from % penetration
+    const flatResAfterPercentReduction = this.flatElementalResist - (this.flatElementalResist * percentResistReduction);
+
+    // Final amount of flat res
+    const finalFlatRes = flatResAfterPercentReduction - flatResistReduction;
+
+    // Calculate resistance
+    const finalElemResist = this.calculateElementalResistance(finalFlatRes);
+
+    // Convert into damage multiplier
+    return 1 - (finalElemResist / 100);
   }
 
-  get elementalResistance(): number {
-    return this.flatElementalResist * this.elementalResistEffect;
+  public calculateElementalResistance(flatResist: number = this.flatElementalResist): number {
+    return flatResist * this.elementalResistEffect;
   }
 
   toString(): string {
-    return `Level ${this.level}; Base ElementalResistance=${this.elementalResistance}% (Flat=${this.flatElementalResist})`;
+    return `Level ${this.level}; Base ElementalResistance=${this.calculateElementalResistance()}% (Flat=${this.flatElementalResist})`;
   }
 }
 

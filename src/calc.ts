@@ -1,5 +1,5 @@
 import { Tag } from './mods/tags';
-import { Damage, ElementalDamage, PhysicalDamage, PoisonPenetration } from './mods/mod-library';
+import { Damage, ElementalDamage, ElementalPenetration, PhysicalDamage, PoisonPenetration } from './mods/mod-library';
 import { CalculatedValue, Environment } from './calculation/mod-group';
 import { ToxicFlame } from './runes/skill-rune-library';
 import { SkillConfiguration } from './runes/skill-configuration';
@@ -11,15 +11,6 @@ import { Mod, ModType } from './mods/mod-definition';
 import { ModProxySource } from './mods/mod-interfaces';
 import { DoT, ElementDamageAmplification, ManaStorm } from './runes/link-rune-library';
 import { MonsterLevel } from './enemy/monster-data';
-
-function printCalcValue(value: CalculatedValue) {
-  console.log(``)
-  console.log(` = Flat: ${ value.flat }`);
-  console.log(` = Increase: ${ value.increase }`);
-  console.log(` = Amplification: ${ value.amplification }`);
-  console.log(` = Dampening: ${ value.dampening }`);
-  console.log(` = Total: ${ value.total }`);
-}
 
 function calculateEffects(env: Environment, skill: SpecificRuneConfiguration, config?: SkillConfiguration): void {
   console.log(`\n==== Calculation stage: Calculating effects ====`);
@@ -98,19 +89,25 @@ function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguratio
   damageMods.mods().forEach(mod => console.log(`   # ${mod.toString()}`));
   console.log(` = ${damageValue.toString()}`);
   const totalBeforePenetration = multiplierValue.total * damageValue.total;
-  console.log(` = DPS before calculating penetration: ${Math.round(totalBeforePenetration)}`);
+  console.log(` = Single instance of damage before calculating resistances & penetration: ${Math.round(totalBeforePenetration)}`);
 
   // 3. Calculate penetration & target resistances
-  console.log(`\n==== Calculation stage: Calculating penetration ====`);
+  console.log(`\n==== Calculation stage: Calculating resistances & penetration ====`);
   const flatPenetrationMods = env.ofCategory(Tag.Penetration).findWithAnyTags(skill.tags).ofType(ModType.Addition);
-  const flatPenetrationValue = flatPenetrationMods.calculateValue();
+  const flatPenetrationValue = flatPenetrationMods.normalSum();
   console.log(` = Flat penetration mods:`);
   flatPenetrationMods.mods().forEach(mod => console.log(`   # ${mod.toString()}`));
-  console.log(` = ${flatPenetrationValue.toString()}`);
+  console.log(` = Flat penetration: ${flatPenetrationValue}`);
 
-  console.log(`Enemy resistance: ${config.enemy.toString()}`);
-  const resistanceEffect = config.enemy.calculateElementalDamageCoefficientForFlatResist(config.enemy.flatElementalResist - flatPenetrationValue.total);
-  console.log(`Base elemental damage reduction: ${resistanceEffect}`);
+  const percentPenetrationMods = env.ofCategory(Tag.Penetration).findWithAnyTags(skill.tags).ofType(ModType.Increase);
+  const percentPenetrationValue = percentPenetrationMods.diminishingSum();
+  console.log(` = Percent penetration mods:`);
+  percentPenetrationMods.mods().forEach(mod => console.log(`   # ${mod.toString()}`));
+  console.log(` = Percent penetration: ${percentPenetrationValue}`);
+
+  console.log(` = Enemy resistance: ${config.enemy.toString()}`);
+  const resistanceEffect = config.enemy.calculateElementalDamageMultiplierFromResists(flatPenetrationValue, percentPenetrationValue);
+  console.log(` = Elemental damage multiplier: ${resistanceEffect}`);
 
   // 3. Final result
   const final = multiplierValue.total * damageValue.total * resistanceEffect;
@@ -125,7 +122,12 @@ function calcDps() {
     PhysicalDamage.increase.of(0.24),
     ElementalDamage.increase.of(0.27),
     Damage.increase.of(0.05),
-    //PoisonPenetration.addition.of(10),
+
+    ElementalDamage.increase.of(0.29),
+    ElementalDamage.increase.of(0.29),
+    ElementalPenetration.increase.of(0.15),
+    ElementalPenetration.increase.of(0.08),
+    PoisonPenetration.addition.of(10),
   ]);
 
   const env = new Environment();
