@@ -28,6 +28,15 @@ export const MainElementDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Phy
 export const SkillDamageMultiplier = new ModBuilder(Tag.Multiplier, [Tag.Multiplier], 'Multiplier');
 
 /**
+ * Weapon mods
+ */
+export const WeaponAttackDamage = new ModBuilder(Tag.Weapon, [Tag.Damage, Tag.Attack], 'Weapon Attack DMG');
+export const WeaponSpellDamage = new ModBuilder(Tag.Weapon, [Tag.Damage, Tag.Spell], 'Weapon Spell DMG');
+export const WeaponAttackSpellDamage = new ModBuilder(Tag.Weapon, [Tag.Damage, Tag.Attack, Tag.Spell], 'Weapon Attack and Spell DMG');
+export const WeaponSpeed = new ModBuilder(Tag.Weapon, [Tag.Speed, Tag.Attack, Tag.Spell], 'Weapon Speed');
+export const WeaponCriticalRate = new ModBuilder(Tag.Weapon, [Tag.Critical, Tag.Attack, Tag.Spell], 'Weapon Critical Rate');
+
+/**
  * Hit Rate
  */
 
@@ -53,6 +62,7 @@ export const ArmorPenetration = new ModBuilder(Tag.Penetration, [Tag.Penetration
 export const CastSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Spell], 'Cast Speed');
 export const AttackSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Attack], 'Attack Speed');
 export const MovementSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Movement], 'Movement Speed');
+export const DoTAcceleration = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.DamageOverTime], 'DoT Acceleration');
 
 /**
  * Base Stats and Defences
@@ -64,9 +74,17 @@ export const Mana = new ModBuilder(Tag.Stats, [Tag.Mana], 'Mana');
 export const ElementalResists = new ModBuilder(Tag.Stats, [Tag.Elemental, Tag.Resistance], 'Element Resist');
 
 /**
+ * Critical
+ */
+
+export const DisableCritical = new ModBuilder(Tag.Special, [Tag.Special, Tag.DisableCritical], 'Critical Hit Disabled');
+export const CriticalRate = new ModBuilder(Tag.Critical, [Tag.Critical], 'Critical Rate');
+
+/**
  * Other
  */
-export const ProjectileCount = new ModBuilder(Tag.Special, [Tag.Special, Tag.Projectile], 'Projectile Count')
+export const ProjectileCount = new ModBuilder(Tag.Special, [Tag.Special, Tag.Projectile], 'Projectile Count');
+
 
 /**
  * Effects

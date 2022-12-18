@@ -20,6 +20,8 @@ export class Mod implements ModProvider {
    */
   public target: Tag.Player | Tag.Minion | Tag.Sentry = Tag.Player;
 
+  private initByValue: boolean = false;
+
   constructor(public definition: ModDefinition) {
   }
 
@@ -35,6 +37,9 @@ export class Mod implements ModProvider {
 
   public withValue(value: number): Mod {
     this.value = value;
+    this.min = value;
+    this.max = value;
+    this.initByValue = true;
     return this;
   }
 
@@ -55,11 +60,16 @@ export class Mod implements ModProvider {
     result.max = this.max * multiplier;
     result.value = this.value * multiplier;
     result.target = this.target;
+    result.source = this.source;
     return result;
   }
 
   toString(): string {
-    return(`${this.definition.pattern(this)} (from ${this.source?.source()})`);
+    if (this.initByValue) {
+      return `${this.definition.pattern(this)} (from ${this.source?.source()})`;
+    } else {
+      return `${this.definition.pattern(this)} (${this.min} - ${this.max}) (from ${this.source?.source()})`;
+    }
   }
 }
 

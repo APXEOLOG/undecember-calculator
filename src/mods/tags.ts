@@ -11,6 +11,8 @@ export enum Tag {
   Speed = 'Speed',
   Stats = 'Stats',
   Special = 'Special',
+  Critical = 'Critical',
+  DisableCritical = 'DisableCritical',
 
   // Rune tags
   Attack = 'Attack',
@@ -36,6 +38,9 @@ export enum Tag {
   Movement = 'Movement',
   Toggle = 'Toggle',
   DefenceSeal = 'Defence Seal',
+
+  // Weapon
+  Weapon = 'Weapon',
 
   // Targets
   Player = 'Player',

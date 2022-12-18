@@ -2,14 +2,21 @@ import { ZodiacConstellation, zodiacNode } from './zodiac';
 import {
   CastSpeed,
   Damage,
+  DisableCritical,
+  DoTAcceleration,
   DoTDamage,
   ElementalDamage,
-  ElementalResists, GrantOverpower,
+  ElementalResists,
+  GrantOverpower,
   Health,
   HitRate,
-  Mana, OverpowerEffect,
+  Mana,
+  OverpowerEffect,
+  PoisonDamage,
+  PoisonPenetration,
   SpellDamage,
   SpellHitRate,
+  StrikeDamage,
 } from '../mods/mod-library';
 
 
@@ -54,9 +61,41 @@ export const Flash = new ZodiacConstellation('Flash', 'V', [
   zodiacNode(ElementalDamage.increase.of(0.1), Health.increase.of(0.03)),
 ]);
 
+export const Breath = new ZodiacConstellation('Breath', 'VI', [
+  zodiacNode(ElementalDamage.increase.of(0.1)),
+  zodiacNode(PoisonDamage.increase.of(0.1)),
+  zodiacNode(PoisonDamage.increase.of(0.1), HitRate.increase.of(0.1)),
+  zodiacNode(HitRate.increase.of(0.1)),
+  zodiacNode(PoisonPenetration.increase.of(0.08)),
+]);
+
+export const Ortemis = new ZodiacConstellation('Ortemis', 'VII', [
+  zodiacNode(Damage.increase.of(0.09)),
+]);
+
+export const Farmer = new ZodiacConstellation('Farmer', 'VIII', [
+  zodiacNode(Damage.increase.of(0.09)),
+]);
+
+
 export const Shade = new ZodiacConstellation('Shade', 'Specialization I', [
   zodiacNode(Damage.increase.of(0.15)),
   zodiacNode(OverpowerEffect.increase.of(0.3)),
-  // zodiacNode(GrantOverpower.addition.of(1)),
+  zodiacNode(GrantOverpower.addition.of(1)),
+  zodiacNode(OverpowerEffect.increase.of(0.3)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
+  zodiacNode(DoTDamage.increase.of(0.3)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
 ]);
+
+export const Greed = new ZodiacConstellation('Greed', 'Specialization II', [
+  zodiacNode(Damage.increase.of(0.15)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
+  zodiacNode(DoTAcceleration.increase.of(0.08)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
+  zodiacNode(DoTDamage.amplification.of(0.1), StrikeDamage.dampening.of(0.05)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
+  zodiacNode(StrikeDamage.amplification.of(0.2), DisableCritical.addition.of(1)),
+]);
+
 

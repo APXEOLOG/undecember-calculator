@@ -10,8 +10,8 @@ function hasAnyTags(source: Tag[], tags: Tag[]): boolean {
   return tags.map(it => source.includes(it)).reduce((prev, cur) => prev || cur, false);
 }
 
-function normalSum(mods: Mod[]): number {
-  return mods.reduce((prev, cur) => prev + cur.value, 0) ?? 0;
+function normalSum(mods: Mod[], fieldName: 'value' | 'min' | 'max' = 'value'): number {
+  return mods.reduce((prev, cur) => prev + cur[fieldName], 0) ?? 0;
 }
 
 function normalProduct(mods: Mod[]): number {
@@ -27,7 +27,12 @@ function oneSubProduct(mods: Mod[]): number {
 }
 
 export class CalculatedValue {
+  public min: number;
+  public max: number;
+
   constructor(public flat: number, public increase: number, public amplification: number, public dampening: number, public total: number) {
+    this.min = 0;
+    this.max = 0;
   }
 
   toString(): string {
@@ -94,19 +99,31 @@ export class Environment implements ModProvider {
    * Perform flat - increase - amplify - dampen pipeline calculation for the values in the env
    * Assuming they already filtered properly
    */
-  calculateValue(): CalculatedValue {
+  calculateValue(useMinMax = false): CalculatedValue {
     const flatMods = this.envMods.filter(it => it.definition.type === ModType.Addition);
     const increaseMods = this.envMods.filter(it => it.definition.type === ModType.Increase);
     const amplifyMods = this.envMods.filter(it => it.definition.type === ModType.Amplification);
     const dampeningMods = this.envMods.filter(it => it.definition.type === ModType.Dampening);
 
-    const flatValue = normalSum(flatMods);
     const increaseValue = normalSum(increaseMods);
     const amplifyValue = oneAddProduct(amplifyMods);
     const dampeningValue = oneSubProduct(dampeningMods);
-    const total = flatValue * (1 + increaseValue) * amplifyValue * dampeningValue;
 
-    return new CalculatedValue(flatValue, increaseValue, amplifyValue - 1, dampeningValue - 1, total);
+    if (useMinMax) {
+      const flatMin = normalSum(flatMods, 'min');
+      const flatMax = normalSum(flatMods, 'max');
+      // Values should be rounded in this case
+      const totalMin = Math.round(flatMin * (1 + increaseValue) * amplifyValue * dampeningValue);
+      const totalMax = Math.round(flatMax * (1 + increaseValue) * amplifyValue * dampeningValue);
+      const result = new CalculatedValue((flatMin + flatMax) / 2, increaseValue, amplifyValue - 1, dampeningValue - 1, (totalMin + totalMax) / 2);
+      result.min = totalMin;
+      result.max = totalMax;
+      return result;
+    } else {
+      const flatValue = normalSum(flatMods);
+      const total = flatValue * (1 + increaseValue) * amplifyValue * dampeningValue;
+      return new CalculatedValue(flatValue, increaseValue, amplifyValue - 1, dampeningValue - 1, total);
+    }
   }
 
   normalSum(): number {

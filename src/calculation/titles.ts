@@ -1,8 +1,8 @@
 import { Mod } from '../mods/mod-definition';
 import { ModProvider, ModSource } from '../mods/mod-interfaces';
 
-export class TitlesEffect implements ModSource, ModProvider {
-  constructor(private allMods: Mod[]) {
+export class ModContainer implements ModSource, ModProvider {
+  constructor(public name: string, private allMods: Mod[]) {
     allMods.forEach(it => it.source = this);
   }
 
@@ -11,6 +11,6 @@ export class TitlesEffect implements ModSource, ModProvider {
   }
 
   source(): string {
-    return `Titles`;
+    return this.name;
   }
 }
