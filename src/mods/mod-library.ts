@@ -95,6 +95,8 @@ export const GrantOverpower = new ModBuilder(Tag.Effect, [Tag.Overpower], 'Overp
 export const OverpowerEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Overpower], 'Overpower Effect');
 export const GrantKnowledge = new ModBuilder(Tag.Effect, [Tag.Knowledge], 'Knowledge');
 export const KnowledgeEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Knowledge], 'Knowledge Effect');
+export const GrantAcceleration = new ModBuilder(Tag.Effect, [Tag.Acceleration], 'Acceleration');
+export const AccelerationEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Acceleration], 'Acceleration Effect');
 
 /**
  * Seals

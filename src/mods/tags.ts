@@ -53,4 +53,5 @@ export enum Tag {
   Effect = 'Effect',
   Overpower = 'Overpower',
   Knowledge = 'Knowledge',
+  Acceleration = 'Acceleration',
 }

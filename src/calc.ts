@@ -3,7 +3,7 @@ import {
   Damage,
   DoTDamage,
   DoTMultiplier,
-  ElementalDamage, GrantKnowledge, KnowledgeEffect,
+  ElementalDamage, GrantKnowledge, GrantOverpower, KnowledgeEffect, OverpowerEffect,
   PoisonDamage,
   WeaponAttackSpellDamage,
 } from './mods/mod-library';
@@ -239,7 +239,7 @@ function calcDps(additionalMods?: ModContainer): number {
   env.addAll(titles.mods());
 
   env.addAll(new Weapon([
-    WeaponAttackSpellDamage.addition.ofMinMax(138, 181),
+    WeaponAttackSpellDamage.addition.ofMinMax(124, 174),
     ElementalDamage.increase.of(0.22),
   ], 'Scepter 1').mods());
 
@@ -307,7 +307,7 @@ function calcDps(additionalMods?: ModContainer): number {
 
   const dps = calculateForSkill(env, rune, {
     enemy: MonsterLevel['100'],
-    stacks: 5,
+    stacks: 1,
   });
 
 
@@ -321,17 +321,9 @@ function calcDps(additionalMods?: ModContainer): number {
 
 function simulate() {
   const scenarios: ModContainer[] = [
-    new ModContainer('Scenario: Multi path', [
-      DoTDamage.increase.of(0.15),
-      DoTMultiplier.addition.of(0.08),
-      DoTDamage.increase.of(0.15),
-      DoTDamage.amplification.of(0.1),
-    ]),
-    new ModContainer('Scenario: Knowledge path', [
-      KnowledgeEffect.increase.of(0.2),
-      GrantKnowledge.addition.of(1),
-      KnowledgeEffect.increase.of(0.2),
-      DoTDamage.amplification.of(0.15),
+    new ModContainer('Scenario: Overpower path', [
+      OverpowerEffect.increase.of(0.3),
+      GrantOverpower.addition.of(1),
     ]),
   ];
 

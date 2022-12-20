@@ -32,8 +32,8 @@ export class LinkRune {
         }
         if (level >= 30) {
           return [
-            StrikeDamage.amplification.of(0.29 + (level - 30) * 0.07), // 0.07 per level
-            DoTDamage.amplification.of(0.235 + (level - 30) * 0.07), // 0.07 per level
+            StrikeDamage.amplification.of(0.29 + (level - 30) * 0.007), // 0.007 per level
+            DoTDamage.amplification.of(0.235 + (level - 30) * 0.007), // 0.007 per level
             Damage.increase.of(0.06),
           ];
         }
@@ -66,7 +66,7 @@ export class LinkRune {
         }
         if (level >= 30) {
           return [
-            ElementalDamage.amplification.of(0.26 + (level - 30) * 0.07), // 0.07 per level
+            ElementalDamage.amplification.of(0.26 + (level - 30) * 0.007), // 0.007 per level
           ];
         }
         return null;
@@ -160,7 +160,7 @@ export class LinkRune {
         if (level >= 30) {
           return [
             PoisonDamage.increase.of(0.52 + (level - 30) * 0.02), // + 0.02 per level
-            PoisonPenetration.addition.of(20 + (level - 30) * 0.5), // +1 per 2 levels (guess we can code is +0.5 for now)
+            PoisonPenetration.addition.of(Math.round(20 + (level - 30) * 0.5)), // +1 per 2 levels (guess we can code is +0.5 for now)
           ];
         }
         return null;
@@ -191,7 +191,7 @@ export class LinkRune {
         }
         if (level >= 30) {
           return [
-            PoisonDamage.addition.ofMinMax(80 + (level - 30) * 2.4, 147 + (level - 30) * 4.4), // 2.4 per level | 4.4 per level (not exactly)
+            PoisonDamage.addition.ofMinMax(Math.round(80 + (level - 30) * 2.4), Math.round(147.1 + (level - 30) * 4.4)), // 2.4 per level | 4.4 per level (not exactly)
           ];
         }
         return null;
