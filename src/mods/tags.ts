@@ -37,6 +37,8 @@ export enum Tag {
   Totem = 'Totem',
   Movement = 'Movement',
   Toggle = 'Toggle',
+  AttackSeal = 'Attack Seal',
+  Seal = 'Seal',
   DefenceSeal = 'Defence Seal',
 
   // Weapon

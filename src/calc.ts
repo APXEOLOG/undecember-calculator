@@ -8,7 +8,6 @@ import {
   WeaponAttackSpellDamage,
 } from './mods/mod-library';
 import { Environment } from './calculation/mod-group';
-import { ToxicFlame } from './runes/skill-rune-library';
 import { SkillConfiguration } from './runes/skill-configuration';
 import { RuneRarity, SpecificRuneConfiguration } from './runes/rune-definition';
 import { ModContainer } from './calculation/titles';
@@ -32,6 +31,7 @@ import { MonsterLevel } from './enemy/monster-data';
 import { ModBuilder } from './mods/mod-builder';
 import { LinkRune } from './runes/link-rune-library';
 import { ItemType, Weapon } from './items/item-definition';
+import { SkillRune } from './runes/skill-rune-library';
 
 function calculateWeaponMods(env: Environment, skill: SpecificRuneConfiguration, config?: SkillConfiguration): void {
   console.log(`\n==== Calculation stage: Calculating weapon mods ====`);
@@ -294,7 +294,7 @@ function calcDps(additionalMods?: ModContainer): number {
   env.addAll(LinkRune.PoisonPenetration.of(RuneRarity.Magic, 33).mods());
   env.addAll(LinkRune.AdditionalPoisonDamage.of(RuneRarity.Normal, 31).mods());
 
-  const rune = ToxicFlame.of(RuneRarity.Legendary, 30);
+  const rune = SkillRune.ToxicFlame.of(RuneRarity.Legendary, 30);
   //const rune = ToxicFlame.of(RuneRarity.Normal, 1);
 
   console.log(`Calculating Toxic Flame Damage...`);

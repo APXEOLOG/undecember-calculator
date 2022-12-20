@@ -16,7 +16,10 @@ export interface RuneLevelDefinition {
 }
 
 export type RuneRarityBonus = {
-  [key in RuneRarity]: Mod[];
+  [RuneRarity.Normal]?: Mod[];
+  [RuneRarity.Magic]?: Mod[];
+  [RuneRarity.Rare]?: Mod[];
+  [RuneRarity.Legendary]?: Mod[];
 };
 
 export interface SpecificRuneConfiguration extends ModProvider {
@@ -25,19 +28,22 @@ export interface SpecificRuneConfiguration extends ModProvider {
   apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void;
 }
 
+export interface RuneDefinitionData {
+  name: string;
+  tags: Tag[];
+  rarityBonus: RuneRarityBonus;
+  apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void;
+  forLevel: (level: number) => Mod[] | null;
+}
+
 export class RuneDefinition implements ModSource {
   /**
    * What is the mod target for this rune. Default is player
    */
   public target: Tag.Player | Tag.Minion | Tag.Sentry = Tag.Player;
 
-  constructor(public name: string, public tags: Tag[], public rarityBonus: RuneRarityBonus, public levels: RuneLevelDefinition, public apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
-    this.rarityBonus.Magic.forEach(it => it.source = this);
-    this.rarityBonus.Rare.forEach(it => it.source = this);
-    this.rarityBonus.Legendary.forEach(it => it.source = this);
-    for (let level in this.levels) {
-      this.levels[level].forEach(it => it.source = this);
-    }
+  constructor(public data: RuneDefinitionData) {
+
   }
 
   forTarget(target: Tag.Player | Tag.Minion | Tag.Sentry = Tag.Player): RuneDefinition {
@@ -46,38 +52,46 @@ export class RuneDefinition implements ModSource {
   }
 
   source(): string {
-    return `Rune: ${this.name}`;
+    return `Rune: ${this.data.name}`;
   }
 
   of(rarity: RuneRarity, level: number): SpecificRuneConfiguration {
-    if (!this.levels[level]) {
+    const mods = this.data.forLevel(level);
+    if (!mods) {
       throw new Error(`${this.source()} - No data for level ${level}`);
     }
+    mods.forEach(it => it.source = this);
+    const rarityMods: Mod[] = this.data.rarityBonus[rarity] ?? [];
+    rarityMods.forEach(it => it.source = this);
     return {
       definition: this,
-      tags: this.tags,
-      mods: () => [...this.levels[level], ...this.rarityBonus[rarity]],
-      apply: this.apply,
+      tags: this.data.tags,
+      mods: () => [...mods, ...rarityMods],
+      apply: this.data.apply,
     }
+  }
+
+  public forLevel(level: number): RuneLevelDefinition {
+    throw new Error(`No scaling formula defined for rune ${this.data.name}`);
   }
 }
 
 export class SkillRuneDefinition extends RuneDefinition {
-  constructor(name: string, tags: Tag[], rarityBonus: RuneRarityBonus, levels: RuneLevelDefinition, apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
-    super(name, tags, rarityBonus, levels, apply);
+  constructor(data: RuneDefinitionData) {
+    super(data);
   }
 
   source(): string {
-    return `Skill Rune: ${this.name}`;
+    return `Skill Rune: ${this.data.name}`;
   }
 }
 
 export class LinkRuneDefinition extends RuneDefinition {
-  constructor(name: string, tags: Tag[], rarityBonus: RuneRarityBonus, levels: RuneLevelDefinition, apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
-    super(name, tags, rarityBonus, levels, apply);
+  constructor(data: RuneDefinitionData) {
+    super(data);
   }
 
   source(): string {
-    return `Link Rune: ${this.name}`;
+    return `Link Rune: ${this.data.name}`;
   }
 }
