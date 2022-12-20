@@ -62,7 +62,7 @@ export class RuneDefinition implements ModSource {
   }
 }
 
-export class SkillRune extends RuneDefinition {
+export class SkillRuneDefinition extends RuneDefinition {
   constructor(name: string, tags: Tag[], rarityBonus: RuneRarityBonus, levels: RuneLevelDefinition, apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
     super(name, tags, rarityBonus, levels, apply);
   }
@@ -72,7 +72,7 @@ export class SkillRune extends RuneDefinition {
   }
 }
 
-export class LinkRune extends RuneDefinition {
+export class LinkRuneDefinition extends RuneDefinition {
   constructor(name: string, tags: Tag[], rarityBonus: RuneRarityBonus, levels: RuneLevelDefinition, apply?: (skillConfiguration: SkillConfiguration, environment: Environment) => void) {
     super(name, tags, rarityBonus, levels, apply);
   }

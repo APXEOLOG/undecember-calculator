@@ -19,7 +19,7 @@ export enum Tag {
   Spell = 'Spell',
 
 
-  DamageOverTime = 'DoT',
+  DoT = 'DoT',
 
   DefenceEnhance = 'Defence Enhance',
   AttackEnhance = 'Attack Enhance',
@@ -50,4 +50,5 @@ export enum Tag {
   // Effects
   Effect = 'Effect',
   Overpower = 'Overpower',
+  Knowledge = 'Knowledge',
 }

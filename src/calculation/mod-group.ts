@@ -130,6 +130,13 @@ export class Environment implements ModProvider {
     return normalSum(this.envMods);
   }
 
+  normalSumMinMax(): { min: number; max: number; } {
+    return {
+      min: normalSum(this.envMods, 'min'),
+      max: normalSum(this.envMods, 'max'),
+    }
+  }
+
   diminishingSum(): number {
     return 1 - this.envMods
       .map(it => 1 - it.value)

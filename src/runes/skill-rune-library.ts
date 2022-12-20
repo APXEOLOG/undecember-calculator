@@ -1,12 +1,12 @@
 import { Tag } from '../mods/tags';
 import { DoTDamage, PoisonDamage, ProjectileCount } from '../mods/mod-library';
 import { ModBuilder } from '../mods/mod-builder';
-import { RuneRarity, SkillRune } from './rune-definition';
+import { RuneRarity, SkillRuneDefinition } from './rune-definition';
 
 const ToxicFlameMultiplier = new ModBuilder(Tag.Multiplier, [Tag.Multiplier, Tag.SkillMultiplier], 'Poison DoT');
-export const ToxicFlame: SkillRune = new SkillRune(
+export const ToxicFlame: SkillRuneDefinition = new SkillRuneDefinition(
   'Toxic Flame',
-  [Tag.Spell, Tag.DamageOverTime, Tag.Poison], // Tag.Projectile - not affected by proj damage
+  [Tag.Spell, Tag.DoT, Tag.Poison], // Tag.Projectile - not affected by proj damage
   {
     [RuneRarity.Normal]: [],
     [RuneRarity.Magic]: [

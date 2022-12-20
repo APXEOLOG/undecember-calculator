@@ -6,12 +6,12 @@ import { Tag } from './tags';
  */
 
 export const ElementalTags = [Tag.Fire, Tag.Cold, Tag.Lightning, Tag.Poison];
-const DirectDamageTags = [Tag.Attack, Tag.Spell, Tag.DamageOverTime, Tag.Elemental, ...ElementalTags]
+const DirectDamageTags = [Tag.Attack, Tag.Spell, Tag.DoT, Tag.Elemental, ...ElementalTags]
 
 export const AttackDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Attack], 'DMG upon Attack');
 export const SpellDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Spell], 'DMG upon Spell');
 export const StrikeDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Strike], 'Strike DMG');
-export const DoTDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.DamageOverTime], 'DoT');
+export const DoTDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.DoT], 'DoT');
 export const ElementalDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Elemental, ...ElementalTags], 'Element DMG');
 export const PoisonDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Poison], 'Poison DMG');
 export const FireDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Fire], 'Fire DMG');
@@ -26,6 +26,8 @@ export const MainElementDamage = new ModBuilder(Tag.Damage, [Tag.Damage, Tag.Phy
  * Multiplier
  */
 export const SkillDamageMultiplier = new ModBuilder(Tag.Multiplier, [Tag.Multiplier], 'Multiplier');
+
+export const DoTMultiplier = new ModBuilder(Tag.Multiplier, [Tag.Multiplier, Tag.DoT], 'DoT Multiplier');
 
 /**
  * Weapon mods
@@ -62,7 +64,7 @@ export const ArmorPenetration = new ModBuilder(Tag.Penetration, [Tag.Penetration
 export const CastSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Spell], 'Cast Speed');
 export const AttackSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Attack], 'Attack Speed');
 export const MovementSpeed = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.Movement], 'Movement Speed');
-export const DoTAcceleration = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.DamageOverTime], 'DoT Acceleration');
+export const DoTAcceleration = new ModBuilder(Tag.Speed, [Tag.Speed, Tag.DoT], 'DoT Acceleration');
 
 /**
  * Base Stats and Defences
@@ -91,3 +93,5 @@ export const ProjectileCount = new ModBuilder(Tag.Special, [Tag.Special, Tag.Pro
  */
 export const GrantOverpower = new ModBuilder(Tag.Effect, [Tag.Overpower], 'Overpower');
 export const OverpowerEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Overpower], 'Overpower Effect');
+export const GrantKnowledge = new ModBuilder(Tag.Effect, [Tag.Knowledge], 'Knowledge');
+export const KnowledgeEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Knowledge], 'Knowledge Effect');
