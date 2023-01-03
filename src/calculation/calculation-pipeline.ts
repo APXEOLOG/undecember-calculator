@@ -8,6 +8,7 @@ import { Mod, ModType } from '../mods/mod-definition';
 import { ModProxySource } from '../mods/mod-interfaces';
 import { ModBuilder } from '../mods/mod-builder';
 import { ItemType } from '../items/item-definition';
+import { ModContainer } from './titles';
 
 function calculateWeaponMods(env: Environment, skill: SpecificRuneConfiguration, config?: SkillConfiguration): void {
   console.log(`\n==== Calculation stage: Calculating weapon mods ====`);
@@ -113,7 +114,9 @@ function calculateEffects(env: Environment, skill: SpecificRuneConfiguration, co
 export function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguration, config: SkillConfiguration): number {
   const env = new Environment();
 
-  env.add(TargetDamageTaken.addition.of(1)); // Monster always receive full damage by default
+  env.addAll(new ModContainer('Default Settings', [
+    TargetDamageTaken.addition.of(1), // Monster always receive full damage by default
+  ]).mods());
 
   // -- Prepare environment
 
