@@ -55,8 +55,8 @@ export class SkillRune {
         }
         if (level >= 30) {
           return [
-            PoisonDamage.addition.of(1500), // TBD
-            SkillRune.ToxicFlameMultiplier.addition.of(1.55), // TBD
+            PoisonDamage.addition.of(Math.round(1500 + (level - 30) * 40.4)), // 40.4 per level
+            SkillRune.ToxicFlameMultiplier.addition.of(1.55 + (level - 30) * 0.02), // 0.02 per level
           ];
         }
         return null;

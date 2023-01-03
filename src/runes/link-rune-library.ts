@@ -1,6 +1,7 @@
 import { Tag } from '../mods/tags';
 import {
   Damage,
+  DoTAcceleration,
   DoTDamage,
   ElementalDamage,
   ElementTags,
@@ -192,6 +193,30 @@ export class LinkRune {
         if (level >= 30) {
           return [
             PoisonDamage.addition.ofMinMax(Math.round(80 + (level - 30) * 2.4), Math.round(147.1 + (level - 30) * 4.4)), // 2.4 per level | 4.4 per level (not exactly)
+          ];
+        }
+        return null;
+      },
+    },
+  );
+
+  static DMGAcceleration: LinkRuneDefinition = new LinkRuneDefinition({
+      name: 'DMG Acceleration',
+      tags: [Tag.Strike, Tag.DoT],
+      rarityBonus: {
+        [RuneRarity.Legendary]: [
+          DoTDamage.increase.of(0.5),
+        ],
+      },
+      forLevel: level => {
+        if (level === 1) {
+          return [
+            DoTAcceleration.increase.of(0.1),
+          ];
+        }
+        if (level >= 30) {
+          return [
+            DoTAcceleration.increase.of(Math.round(0.39 + (level - 30) * 0.05)), // 0.05 per level
           ];
         }
         return null;

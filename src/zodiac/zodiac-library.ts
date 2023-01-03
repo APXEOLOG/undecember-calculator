@@ -5,12 +5,17 @@ import {
   Damage,
   DisableCritical,
   DoTAcceleration,
-  DoTDamage, DoTMultiplier,
-  ElementalDamage, ElementalPenetration,
-  ElementalResists, GrantAcceleration, GrantKnowledge,
+  DoTDamage,
+  DoTMultiplier,
+  ElementalDamage,
+  ElementalPenetration,
+  ElementalResists,
+  GrantAcceleration,
+  GrantKnowledge,
   GrantOverpower,
   Health,
-  HitRate, KnowledgeEffect,
+  HitRate,
+  KnowledgeEffect,
   Mana,
   OverpowerEffect,
   PoisonDamage,
@@ -50,7 +55,7 @@ export const Seed = new ZodiacConstellation('Seed', 'IV', [
   zodiacNode(SpellDamage.increase.of(0.1)),
   zodiacNode(DoTDamage.increase.of(0.1)),
   zodiacNode(SpellDamage.increase.of(0.1), SpellHitRate.increase.of(0.1)),
-  zodiacNode(DoTDamage.increase.of(0.1)),
+  // zodiacNode(DoTDamage.increase.of(0.1)), Taken AOE instead
   zodiacNode(SpellDamage.increase.of(0.1), Mana.addition.of(30)),
 ]);
 
@@ -60,7 +65,6 @@ export const Flash = new ZodiacConstellation('Flash', 'V', [
   zodiacNode(ElementalDamage.increase.of(0.1), Health.addition.of(25)),
   zodiacNode(ElementalResists.addition.of(2)),
   zodiacNode(ElementalDamage.increase.of(0.1), Health.increase.of(0.03)),
-  zodiacNode(ElementalDamage.increase.of(0.1), Health.addition.of(25)),
 ]);
 
 export const Breath = new ZodiacConstellation('Breath', 'VI', [
@@ -83,8 +87,21 @@ export const Hunter = new ZodiacConstellation('Hunter', 'VIII', [
   zodiacNode(Damage.increase.of(0.09)),
 ]);
 
-export const Brilliance = new ZodiacConstellation('Brilliance', 'Specialization I', [
+export const Maggot = new ZodiacConstellation('Maggot', 'VII', [
+  zodiacNode(Damage.increase.of(0.4)),
+]);
+
+export const Laia = new ZodiacConstellation('Laia', 'VIII', [
+  // All cluster is for dual wielding, but it's not supported for now
+  zodiacNode(Damage.increase.of(0.1)),
+  zodiacNode(ElementalDamage.increase.of(0.3)),
+  zodiacNode(Damage.increase.of(0.3)),
+  zodiacNode(Damage.increase.of(0.1)),
   zodiacNode(Damage.increase.of(0.15)),
+]);
+
+export const Brilliance = new ZodiacConstellation('Brilliance', 'Specialization I', [
+  zodiacNode(ElementalDamage.increase.of(0.15)),
   zodiacNode(AccelerationEffect.increase.of(0.1)),
   zodiacNode(GrantAcceleration.addition.of(1)),
   zodiacNode(ElementalDamage.increase.of(0.15)),
@@ -94,28 +111,25 @@ export const Brilliance = new ZodiacConstellation('Brilliance', 'Specialization 
 ]);
 
 export const Vacuum = new ZodiacConstellation('Vacuum', 'Specialization II', [
-  zodiacNode(Damage.increase.of(0.15)),
+  zodiacNode(ElementalDamage.increase.of(0.15)),
   zodiacNode(DoTDamage.increase.of(0.15)),
   zodiacNode(DoTMultiplier.addition.of(0.08)), // While this is presented as increase type of value we should normally define it as addition (at least for now)
-  // zodiacNode(DoTDamage.increase.of(0.15)),
-  // zodiacNode(DoTDamage.amplification.of(0.1), StrikeDamage.dampening.of(0.05)),
+  zodiacNode(DoTDamage.increase.of(0.15)),
+  zodiacNode(DoTDamage.amplification.of(0.1), StrikeDamage.dampening.of(0.05)),
   zodiacNode(KnowledgeEffect.increase.of(0.2)),
   zodiacNode(GrantKnowledge.addition.of(1)),
-  zodiacNode(KnowledgeEffect.increase.of(0.2)),
-  zodiacNode(ElementalDamage.amplification.of(0.15)),
 ]);
 
 export const Pirate = new ZodiacConstellation('Pirate', 'Specialization III', [
-  // Status effect rate
-  // Mana regen
   zodiacNode(ElementalDamage.amplification.of(0.15)), // And mana cost
   zodiacNode(ElementalDamage.increase.of(0.15)),
   zodiacNode(DoTMultiplier.addition.of(0.1)),
 
   zodiacNode(ElementalDamage.increase.of(0.15)),
-  // 10 amplif against debuffed
+  zodiacNode(Damage.amplification.of(0.1)), // Against crowd controlled
+
   zodiacNode(ElementalDamage.increase.of(0.15)),
-  // 8% lihtning on hit
+  zodiacNode(Damage.amplification.of(0.1)), // Against debuffed
 ]);
 
 export const Shade = new ZodiacConstellation('Shade', 'Specialization I', [

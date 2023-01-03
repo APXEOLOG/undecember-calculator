@@ -11,6 +11,12 @@ export enum RuneRarity {
   Legendary = 'Legendary',
 }
 
+export const RuneRarityOrder = [RuneRarity.Normal, RuneRarity.Magic, RuneRarity.Rare, RuneRarity.Legendary];
+
+export function isMoreRare(base: RuneRarity, other: RuneRarity): boolean {
+  return RuneRarityOrder.indexOf(base) > RuneRarityOrder.indexOf(other);
+}
+
 export interface RuneLevelDefinition {
   [level: number]: Mod[];
 }

@@ -97,6 +97,21 @@ export const GrantKnowledge = new ModBuilder(Tag.Effect, [Tag.Knowledge], 'Knowl
 export const KnowledgeEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Knowledge], 'Knowledge Effect');
 export const GrantAcceleration = new ModBuilder(Tag.Effect, [Tag.Acceleration], 'Acceleration');
 export const AccelerationEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Acceleration], 'Acceleration Effect');
+export const GrantShock = new ModBuilder(Tag.Effect, [Tag.Shock], 'Shock');
+export const ShockEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.Shock], 'Shock Effect');
+export const GrantMentalStimulation = new ModBuilder(Tag.Effect, [Tag.MentalStimulation], 'Mental Stimulation');
+export const MentalStimulationEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.MentalStimulation], 'Mental Stimulation Effect');
+
+export const GrantSealOfPain = new ModBuilder(Tag.Effect, [Tag.SealOfPain], 'Seal Of Pain');
+export const SealOfPainEffect = new ModBuilder(Tag.Effect, [Tag.Effect, Tag.SealOfPain], 'Seal Of Pain Effect');
+
+/**
+ * Monster damage taken
+ */
+
+export const TargetDamageTaken = new ModBuilder(Tag.TargetDamageTaken, [Tag.TargetDamageTaken, Tag.Attack, Tag.Spell], 'Damage Taken');
+export const PoisonDamageTaken = new ModBuilder(Tag.TargetDamageTaken, [Tag.TargetDamageTaken, Tag.Poison], 'Poison Damage Taken');
+export const ElementDamageTaken = new ModBuilder(Tag.TargetDamageTaken, [Tag.TargetDamageTaken, ...ElementTags], 'Element Damage Taken');
 
 /**
  * Seals

@@ -2,15 +2,26 @@ import {
   ArmorPenetration,
   AttackSpeed,
   CastSpeed,
+  DoTDamage,
+  ElementalDamage,
   ElementalPenetration,
-  MainElementDamage, MovementSpeed,
+  MainElementDamage,
+  MovementSpeed,
   SpellDamage,
+  TargetDamageTaken,
 } from './mod-library';
 import { ModSource } from './mod-interfaces';
 import { Tag } from './tags';
 import { Mod } from './mod-definition';
 
-export const EffectTags = [Tag.Overpower, Tag.Knowledge, Tag.Acceleration];
+export const EffectTags = [
+  Tag.Overpower,
+  Tag.Knowledge,
+  Tag.Acceleration,
+  Tag.Shock,
+  Tag.MentalStimulation,
+  Tag.SealOfPain,
+];
 
 export class EffectSource implements ModSource {
   constructor(private effect: Tag) {
@@ -18,7 +29,7 @@ export class EffectSource implements ModSource {
   }
 
   source(): string {
-    return `Effect: ${this.effect}`;
+    return `Effect: ${ this.effect }`;
   }
 }
 
@@ -38,5 +49,15 @@ export const Effects: { [key in Tag]: Mod[] } = {
     AttackSpeed.increase.of(0.2),
     MovementSpeed.increase.of(0.15),
   ],
-}
+  [Tag.Shock]: [
+    TargetDamageTaken.increase.of(0.2),
+  ],
+  [Tag.MentalStimulation]: [
+    ElementalDamage.amplification.of(0.15),
+  ],
+  [Tag.SealOfPain]: [
+    // TODO: Seal effect should be taken from the rune level
+    DoTDamage.amplification.of(0.245),
+  ],
+};
 

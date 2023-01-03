@@ -49,9 +49,15 @@ export enum Tag {
   Minion = 'Minion',
   Sentry = 'Sentry',
 
+  // Target damage taken
+  TargetDamageTaken = 'Damage Taken',
+
   // Effects
   Effect = 'Effect',
   Overpower = 'Overpower',
   Knowledge = 'Knowledge',
   Acceleration = 'Acceleration',
+  MentalStimulation = 'Mental Stimulation',
+  Shock = 'Shock',
+  SealOfPain = 'Seal Of Pain',
 }

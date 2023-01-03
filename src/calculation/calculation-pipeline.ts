@@ -1,37 +1,13 @@
-import { Tag } from './mods/tags';
-import {
-  Damage,
-  DoTDamage,
-  DoTMultiplier,
-  ElementalDamage, GrantKnowledge, GrantOverpower, KnowledgeEffect, OverpowerEffect,
-  PoisonDamage,
-  WeaponAttackSpellDamage,
-} from './mods/mod-library';
-import { Environment } from './calculation/mod-group';
-import { SkillConfiguration } from './runes/skill-configuration';
-import { RuneRarity, SpecificRuneConfiguration } from './runes/rune-definition';
-import { ModContainer } from './calculation/titles';
-import {
-  Breath,
-  Brilliance,
-  Cliff, Farmer,
-  Flash,
-  Forest,
-  Gem,
-  Hunter,
-  Ortemis,
-  Pirate,
-  Seed,
-  Vacuum,
-} from './zodiac/zodiac-library';
-import { Effects, EffectTags } from './mods/effects';
-import { Mod, ModType } from './mods/mod-definition';
-import { ModProxySource } from './mods/mod-interfaces';
-import { MonsterLevel } from './enemy/monster-data';
-import { ModBuilder } from './mods/mod-builder';
-import { LinkRune } from './runes/link-rune-library';
-import { ItemType, Weapon } from './items/item-definition';
-import { SkillRune } from './runes/skill-rune-library';
+import { Tag } from '../mods/tags';
+import { Damage, TargetDamageTaken } from '../mods/mod-library';
+import { Environment } from './mod-group';
+import { SkillConfiguration } from '../runes/skill-configuration';
+import { SpecificRuneConfiguration } from '../runes/rune-definition';
+import { Effects, EffectTags } from '../mods/effects';
+import { Mod, ModType } from '../mods/mod-definition';
+import { ModProxySource } from '../mods/mod-interfaces';
+import { ModBuilder } from '../mods/mod-builder';
+import { ItemType } from '../items/item-definition';
 
 function calculateWeaponMods(env: Environment, skill: SpecificRuneConfiguration, config?: SkillConfiguration): void {
   console.log(`\n==== Calculation stage: Calculating weapon mods ====`);
@@ -132,10 +108,12 @@ function calculateEffects(env: Environment, skill: SpecificRuneConfiguration, co
 }
 
 /**
- * TODO: Multi damage types support
+ * Calculate single instance of damage
  */
-function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguration, config: SkillConfiguration): number {
+export function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguration, config: SkillConfiguration): number {
   const env = new Environment();
+
+  env.add(TargetDamageTaken.addition.of(1)); // Monster always receive full damage by default
 
   // -- Prepare environment
 
@@ -194,151 +172,15 @@ function calculateForSkill(baseEnv: Environment, skill: SpecificRuneConfiguratio
   const resistanceEffect = config.enemy.calculateElementalDamageMultiplierFromResists(flatPenetrationValue, percentPenetrationValue);
   console.log(` = Elemental damage multiplier: ${ resistanceEffect }`);
 
-  // 3. Final result
-  const final = multiplierValue.total * damageValue.total * resistanceEffect;
+  console.log(`\n==== Calculation stage: Monster increased damage taken ====`);
+  const damageTakenMods = env.ofCategory(Tag.TargetDamageTaken).findWithAnyTags(skill.tags);
+  const damageTakenValue = damageTakenMods.calculateValue();
+  console.log(` = Damage taken mods:`);
+  damageTakenMods.mods().forEach(mod => console.log(`   # ${ mod.toString() }`));
+  console.log(` = ${ damageTakenValue.toString() }`);
 
+  // Final result
+  const final = multiplierValue.total * damageValue.total * resistanceEffect * damageTakenValue.total;
 
   return final;
 }
-
-function calcDps(additionalMods?: ModContainer): number {
-  const titles = new ModContainer('Titles', [
-    ElementalDamage.increase.of(0.27),
-    Damage.increase.of(0.05),
-  ]);
-
-  const charms = new ModContainer('Charms', [
-    ElementalDamage.increase.of(0.71),
-    DoTDamage.increase.of(0.74),
-    ElementalDamage.increase.of(0.77),
-    DoTDamage.increase.of(0.73),
-    DoTDamage.increase.of(0.71),
-    ElementalDamage.increase.of(0.6),
-  ]);
-
-  const mastery = new ModContainer('Mastery', [
-    // Do not include local weapon buffs here till we reverse weapon quality formula
-    WeaponAttackSpellDamage.addition.of(25),
-    WeaponAttackSpellDamage.increase.of(0.2),
-  ]);
-
-  const items = new ModContainer('Items', [
-    // Amulet
-    ElementalDamage.increase.of(0.44),
-    PoisonDamage.addition.ofMinMax(27, 41),
-
-    // Ring 1
-    ElementalDamage.increase.of(0.34),
-    ElementalDamage.increase.of(0.34),
-
-    // Ring 2
-    ElementalDamage.increase.of(0.34),
-  ]);
-
-  const env = new Environment();
-  env.addAll(titles.mods());
-
-  env.addAll(new Weapon([
-    WeaponAttackSpellDamage.addition.ofMinMax(124, 174),
-    ElementalDamage.increase.of(0.22),
-  ], 'Scepter 1').mods());
-
-  // env.addAll(new Weapon([
-  //   WeaponAttackSpellDamage.addition.ofMinMax(330, 415),
-  //   /*WeaponAttackSpellDamage.addition.ofMinMax(141, 186),
-  //   WeaponAttackSpellDamage.increase.of(0.55),*/
-  //
-  //
-  //   ElementalDamage.increase.of(0.22),
-  //   PoisonDamage.addition.ofMinMax(35, 47),
-  //   DoTDamage.amplification.of(0.11),
-  // ], 'Scepter 1').mods());
-
-  // env.addAll(new Weapon([
-  //   WeaponAttackSpellDamage.addition.ofMinMax(350, 434),
-  //
-  //   /*WeaponAttackSpellDamage.addition.ofMinMax(134, 168),
-  //   WeaponAttackSpellDamage.addition.ofMinMax(23, 35),
-  //   WeaponAttackSpellDamage.increase.of(0.48),*/
-  //
-  //   ElementalDamage.increase.of(0.22),
-  //   PoisonDamage.addition.ofMinMax(83, 121),
-  //   DoTDamage.amplification.of(0.03),
-  // ], 'Scepter 2').mods());
-
-  if (additionalMods) {
-    env.addAll(additionalMods.mods());
-  }
-
-  env.addAll(mastery.mods());
-  env.addAll(items.mods());
-  env.addAll(charms.mods());
-  env.addAll(Cliff.mods());
-  env.addAll(Forest.mods());
-  env.addAll(Gem.mods());
-  env.addAll(Seed.mods());
-  env.addAll(Brilliance.mods());
-
-  env.addAll(Flash.mods());
-  env.addAll(Breath.mods());
-  env.addAll(Vacuum.mods());
-  env.addAll(Ortemis.mods());
-  env.addAll(Hunter.mods());
-  env.addAll(Farmer.mods());
-  env.addAll(Pirate.mods());
-
-  env.addAll(LinkRune.ElementDamageAmplification.of(RuneRarity.Magic, 32).mods());
-  env.addAll(LinkRune.DoT.of(RuneRarity.Magic, 31).mods());
-  env.addAll(LinkRune.ManaStorm.of(RuneRarity.Legendary, 34).mods());
-  env.addAll(LinkRune.SpellDamageIncrease.of(RuneRarity.Normal, 30).mods());
-  env.addAll(LinkRune.PoisonPenetration.of(RuneRarity.Magic, 33).mods());
-  env.addAll(LinkRune.AdditionalPoisonDamage.of(RuneRarity.Normal, 31).mods());
-
-  const rune = SkillRune.ToxicFlame.of(RuneRarity.Legendary, 30);
-  //const rune = ToxicFlame.of(RuneRarity.Normal, 1);
-
-  console.log(`Calculating Toxic Flame Damage...`);
-  /*const dps5 = calculateForSkill(env, rune, {
-    enemy: MonsterLevel['1'],
-    stacks: 5,
-    targetResist: 10,
-    silent: true,
-  });*/
-
-  const dps = calculateForSkill(env, rune, {
-    enemy: MonsterLevel['100'],
-    stacks: 1,
-  });
-
-
-  /// 43057
-
-  console.log();
-  console.log(`Resulting Tick Damage: ${ Math.round(dps) }`);
-  //console.log(`Resulting DPS 5 stacks: ${ Math.round(dps5) }`);
-  return dps;
-}
-
-function simulate() {
-  const scenarios: ModContainer[] = [
-    new ModContainer('Scenario: Overpower path', [
-      OverpowerEffect.increase.of(0.3),
-      GrantOverpower.addition.of(1),
-    ]),
-  ];
-
-
-  const defaultDps = calcDps();
-  const scenarioResults = scenarios.map(it => ({
-    name: it.name,
-    dps: calcDps(it),
-  }));
-
-  console.log(`Default DPS: ${defaultDps}`);
-  scenarioResults.forEach(result => {
-    const improvement = (((result.dps / defaultDps) - 1) * 100).toFixed(1);
-    console.log(`${result.name}: +${improvement}%  (${result.dps})`);
-  });
-}
-
-calcDps();

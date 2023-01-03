@@ -40,14 +40,14 @@ export class MonsterData {
 
 export const MonsterLevel = {
   1: new MonsterData(1, 0.99),
-  10: new MonsterData(100, 0.909),
-  20: new MonsterData(100, 0.8335),
-  30: new MonsterData(100, 0.769),
-  40: new MonsterData(100, 0.7145),
-  50: new MonsterData(100, 0.667),
-  60: new MonsterData(100, 0.626),
-  70: new MonsterData(100, 0.588),
-  80: new MonsterData(100, 0.555),
-  90: new MonsterData(100, 0.525),
+  10: new MonsterData(10, 0.909),
+  20: new MonsterData(20, 0.8335),
+  30: new MonsterData(30, 0.769),
+  40: new MonsterData(40, 0.7145),
+  50: new MonsterData(50, 0.667),
+  60: new MonsterData(60, 0.626),
+  70: new MonsterData(70, 0.588),
+  80: new MonsterData(80, 0.555),
+  90: new MonsterData(90, 0.525),
   100: new MonsterData(100, 0.5),
 }
